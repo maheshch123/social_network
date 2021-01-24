@@ -1,0 +1,80 @@
+{% extends 'profile.html' %}
+
+{% block content %}
+<div style="text-align: center;">
+    <h3>Videos of :   {{user.username}} </h3> 
+</div>
+
+{% for post in posts %}
+{% if post.video %}
+
+<div class="card">
+    <div class="card_header">
+        <div class="profile_image">
+            <img style="display: inline-block;
+            height: 40px;
+            width: 40px;
+            padding: 0;
+            margin: -3px;
+            border: 0 solid #000;
+            border-radius: 50%;" src="{{post.author.profile.image.url}}" alt="">
+        </div>
+
+        <div class="post_info">
+            <a href=""><div class="post_name">{{post.author.username}}</div></a>
+            <div class="post_location">{{user.profile.address}}</div>
+        </div>
+        <div class="post_options"><a href="{% url 'post_details' post.id %}"><svg class="bi bi-three-dots" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M3 9.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm5 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm5 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" clip-rule="evenodd"/>
+          </svg></div></a>
+    </div>
+    <div class="post_image">
+        {% if post.image %}
+        <img src="{{ post.image.url }}" alt="">
+        {% endif %}
+
+        {% if post.video %}
+        <video src="{{post.video.url}}" controls height="100%" width="100%"></video>
+        {% endif %}
+
+
+    </div>
+    <div class="engagement">
+        
+        
+          <a href="{% url 'post_details' post.id %}"><svg class="bi bi-chat-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M14 1H2a1 1 0 00-1 1v8a1 1 0 001 1h2.5a2 2 0 011.6.8L8 14.333 9.9 11.8a2 2 0 011.6-.8H14a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v8a2 2 0 002 2h2.5a1 1 0 01.8.4l1.9 2.533a1 1 0 001.6 0l1.9-2.533a1 1 0 01.8-.4H14a2 2 0 002-2V2a2 2 0 00-2-2H2z" clip-rule="evenodd"/>
+          </svg></a>
+            <strong style="opacity: 0.6; padding: -5px;">{{ post.number_of_comments }} comment(s)</strong>
+
+            <a href="#"><span class="glyphicon"><svg class="bi bi-bookmark" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M8 12l5 3V3a2 2 0 00-2-2H5a2 2 0 00-2 2v12l5-3zm-4 1.234l4-2.4 4 2.4V3a1 1 0 00-1-1H5a1 1 0 00-1 1v10.234z" clip-rule="evenodd"/>
+              </svg></span></a>
+    </div>
+    <!-- likes -->
+
+    <div class="likes">
+        <form action="{% url 'like_post' %}" method="POST" class="ui form">
+            {% csrf_token %}
+            <input type="hidden" name="post_id" value="{{post.id}}">
+            {% if user not in post.liked.all %}
+            <button class="btn btn-success btn-sm">Like</button>
+            {% else %}
+            <button  class="btn btn-danger btn-sm">Unlike</button>
+            {% endif %}
+        </form>
+        <strong>{{post.liked.all.count}} Likes</strong>
+        </div>
+
+        <!-- end likes -->
+    <div class="caption">
+        <a href="{% url 'post_details' post.id %}"><h2>{{post.author}}</h2></a>
+        <span><p>{{post.caption}}</p></span>
+    </div>
+    <div class="time_posted">
+        {{post.created_date}} 
+    </div>                    
+</div>
+{% endif %}
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,32 @@
+{% load static %}
+<html lang="en">
+ <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Signup</title>
+ </head>
+ <body>
+   
+   <h1>create account</h1>
+       
+       <form action="register" method="POST">
+       {% csrf_token %}
+           <input type="text" autofocus name="first_name" placeholder="first name" size="20" required>
+           <input type="text" name="last_name" placeholder="last name" size="20" required><br><br>
+           <input type="text" name="username" placeholder="usernamae" size="20"><br><br>
+           <input type="email" name="email" placeholder="email" size="46" required><br><br>
+           <input type="password" size="20" name="password1" placeholder="password" min="6" maxlength="10" required><br><br>
+           <input type="password" size="20" name="password2" placeholder="confirm password" required><br><br>
+           <input type="submit" value="register">
+               
+           </form>
+ 
+             <div>
+                 {% for message in messages %}
+                 <h4>{{ message }}</h4>
+                 {% endfor %}
+             </div>
+           
+ </body>
+ </html>
+      

@@ -1,0 +1,73 @@
+{% extends 'find_friends.html' %}
+<!-- {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>friends</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Raleway" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+  <link rel="stylesheet" href="{% static 'css/planetx.css' %}">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+
+</head>
+<body> -->
+
+{% block content %}
+
+
+{% for message in messages %}
+<h3 style="text-align: center;"> No similar results for '{{message}}'</h3>
+{% endfor %}
+
+
+{% for user in users %}
+<div class="cards">
+    <div class="card_header">
+        
+        {% if user.profile.image %}
+ 
+        <div class="profile_image">
+            <img style="display: inline-block;
+            height: 90px;
+            width: 80px;
+            padding: -3px;
+            margin: -2px;
+            margin-bottom: 20px;
+            border: 0 solid #000;
+            border-radius: 7%;" src="{{user.profile.image.url}}" alt="">
+        </div>
+            
+            {% endif %}
+        
+        
+        <div class="post_infos">
+            <a href=""><div class="post_name"><strong>{{user.username}}</strong></div></a>
+        
+            <div class="post_locations">{{user.profile.address}}</div>
+            
+        </div>
+        <div class="post_optionss"><h5><a href="#">Add Friend</a></h5>
+            </div>
+
+    </div>                   
+</div>
+{% endfor %}
+    
+{% endblock %}
+<!-- </body>
+</html> -->

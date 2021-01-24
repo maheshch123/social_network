@@ -1,0 +1,153 @@
+{% extends 'index.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="card">
+    <div class="card_header">
+ 
+        <div class="profile_image">
+            <img style="display: inline-block;
+            height: 40px;
+            width: 40px;
+            padding: 0;
+            margin: -3px;
+            border: 0 solid #000;
+            border-radius: 50%;" src="{{object.author.profile.image.url}}" alt="">
+        </div>
+
+        <div class="post_info">
+            <a class="mb-3" href="{% url 'user_posts' object.author.username %}"><div class="post_name">{{object.author}}</div></a>
+            <div class="post_location">{{object.author.profile.address}}</div>
+        </div>
+        <div class="post_options">
+            
+          {% if object.author == user %}
+          {% if object.video %}
+          <a style="border-color: black;" href="{% url 'video_update' object.id %}" class="btn btn-secondary btn-sm mb-1">Update</a>
+          {% else %}
+          <a href="{% url 'post-update' object.id %}" class="btn btn-secondary btn-sm mb-1">Update</a>
+          {% endif %}
+          <a href="{% url 'post_delete' object.id %}" class="btn btn-danger btn-sm mb-1">Delete</a>
+          {% endif %}
+        </div>
+
+    </div>
+    <div class="post_image">
+        {% if post.image %}
+        <img src="{{ object.image.url }}" alt="">
+        {% endif %}
+
+        {% if post.video %}
+        <video src="{{post.video.url}}" controls height="100%" width="100%"></video>
+        {% endif %}
+
+    </div>
+    <div class="engagement">
+        
+        <a href="#"><svg class="bi bi-chat-square" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M14 1H2a1 1 0 00-1 1v8a1 1 0 001 1h2.5a2 2 0 011.6.8L8 14.333 9.9 11.8a2 2 0 011.6-.8H14a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v8a2 2 0 002 2h2.5a1 1 0 01.8.4l1.9 2.533a1 1 0 001.6 0l1.9-2.533a1 1 0 01.8-.4H14a2 2 0 002-2V2a2 2 0 00-2-2H2z" clip-rule="evenodd"/>
+          </svg></a>
+          <strong style="opacity: 0.6; padding: -5px;">{{ post.number_of_comments }} comment(s)</strong>
+        
+          <a href="#"><span class="glyphicon"><svg class="bi bi-bookmark" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M8 12l5 3V3a2 2 0 00-2-2H5a2 2 0 00-2 2v12l5-3zm-4 1.234l4-2.4 4 2.4V3a1 1 0 00-1-1H5a1 1 0 00-1 1v10.234z" clip-rule="evenodd"/>
+          </svg></span></a>
+    </div>
+     <!-- likes -->
+
+     <div class="likes">
+        <form action="{% url 'like_post' %}" method="POST" class="ui form">
+            {% csrf_token %}
+            <input type="hidden" name="post_id" value="{{post.id}}">
+            {% if user not in post.liked.all %}
+            <button class="btn btn-success btn-sm">Like</button>
+            {% else %}
+            <button  class="btn btn-danger btn-sm">Unlike</button>
+            {% endif %}
+        </form>
+        <strong style="opacity: 0.9;">{{post.liked.all.count}} Likes</strong>
+        </div>
+
+        <!-- end likes -->
+        <div class="caption">
+            <span><h4><strong style="opacity: 0.7;">{{post.author}}</strong></h4></span>
+            <span><p><strong>{{post.caption}}</strong></p></span>
+        </div>
+    <div style="opacity: 0.9;" class="time_posted">
+        {{post.created_date}}
+    </div>                    
+</div>
+
+<div class="container">
+        
+    <div class="row">
+        <div class="col-md-8">
+          <div class="page-header">
+            <h1><small class="pull-right">{{ post.number_of_comments }}</small> Comments </h1>
+          </div> 
+          {% for comment in comments %}
+           <div class="comments-list">
+               <div class="media">
+                
+                {% if comment.comment_updated %}
+                <p class="pull-right">updated on <small>{{ comment.comment_updated | date:"H:i l, d.m.y" }}</small></p>
+
+                {% else %}
+                <p class="pull-right"><small>{{ comment.date_posted | date:"H:i l, d.m.y" }}</small></p>
+
+                {% endif %}
+               
+                   <a class="media-left" href="#">
+                      <img
+               class="rounded-circle mr-2"
+               style="display: inline-block;
+    height: 40px;
+    width: 40px;
+    padding: 0;
+    margin: -3px;
+    border: 0 solid #000;
+    border-radius: 50%;"
+                           src="{{ comment.author.profile.image.url }}">
+                    </a>
+                    <div class="media-body">
+                        
+                      <h4 class="media-heading user_name"><a class="mr-2 white-important" href="">
+               {{ comment.author }}
+           </a></h4>
+                      <p>
+                    {{ comment.content }}
+                    </p>
+                        {% if comment.author == user %}
+                      <p><small><a href="{% url 'comment-update' comment.id %}">Update</a> - <a href="/delete/{{comment.id}}">Delete</a></small></p>
+                        {% endif %}
+                        {% if post.author == user %}
+                                {% if comment.author == user %}
+                                
+                                {% else %}
+                               <a style="padding: 20px;" href="/delete/{{comment.id}}">- Delete</a>
+                               {% endif %}
+                            {% endif %}
+                    </div>
+                  </div><br>
+                  {% empty %}
+                  <p>No comments yet!</p>
+                  {% endfor %}
+                  {% if user is not None %}
+    <div class="col-12 col-md-6 pl-0 pl-md-3 pr-3">
+        <h3 class="white-important mb-3">
+            Add a comment
+        </h3>
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                {{ form | crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-primary" type="submit">Submit comment</button>
+            </div>
+        </form>
+    </div><br><br><br><br>
+{% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="content-section">
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Update Post</legend>
+                {{form | crispy}}
+            </fieldset>
+            <div class="form-group">
+                <button style="border-color: black;" class="btn btn-outline-info" type="submit">Post</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
