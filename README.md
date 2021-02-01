@@ -1,5 +1,5 @@
                  **social_network**
-		   *poject Description*::
+		   poject Description::
 
 # The main theme of the project is to build a social media website where the user can do the following things:
 Register if new user
